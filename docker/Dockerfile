@@ -16,6 +16,9 @@ RUN pip3 install -r requirements.txt
 # swift can interoperate with python3.
 RUN pip3 install -r requirements_py_graphics.txt
 
+# Install language2motion project dependencies.
+RUN pip3 install -r requirements_l2m.txt
+
 # Copy the kernel into the container
 WORKDIR /swift-jupyter
 COPY . .
