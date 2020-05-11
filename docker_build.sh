@@ -1,5 +1,6 @@
 # PWD=pwd
 # cd ..
+## https://lifehacker.com/start-a-simple-web-server-from-any-directory-on-your-ma-496425450
 # python -m SimpleHTTPServer 8000 &
 # cd $PWD
 export LOCAL_IP=http://172.20.10.8:8000
