@@ -1,4 +1,3 @@
-# FROM gcr.io/swift-tensorflow/base-deps-cuda10.2-cudnn7-ubuntu18.04 
 # cuda10.1 for fastai-1 GCP instance
 FROM gcr.io/swift-tensorflow/base-deps-cuda10.1-cudnn7-ubuntu18.04 
 
@@ -18,8 +17,10 @@ RUN pip3 install -r requirements.txt
 # swift can interoperate with python3.
 RUN pip3 install -r requirements_py_graphics.txt
 
-# Install language2motion project dependencies.
+# Install language2motion project dependencies and tools
 RUN pip3 install -r requirements_l2m.txt
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssh-client tmux mc glances wget unzip
 
 # Copy the kernel into the container
 WORKDIR /swift-jupyter
@@ -42,9 +43,6 @@ RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf
 
 # Add Swift to the PATH
 ENV PATH="$PATH:/swift-tensorflow-toolchain/usr/bin/"
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-client tmux mc glances
 
 # Run jupyter on startup
 EXPOSE 8888
