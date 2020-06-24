@@ -1,12 +1,15 @@
-# docker_run.sh gcp|local
-# create container on GCP instance or locally
+# docker_run.sh gpu|cpu_macos
+# create container on GPU machine or on macOS
 
-if [ "$1" == "gcp" ]; then
+export PORT1=8888:8888 # jupyter lab
+export PORT2=6006:6006 # tensorboard
+# export PORT1=8081:8888  # for Wojtek's GCP
+
+if [ "$1" == "gpu" ]; then
     cd ~
-    docker run --gpus all --name swift-jupyter -p 8081:8888 --privileged -v $(pwd):/notebooks -v swift-jupyter swift-jupyter
+    docker run --name swift-jupyter -p $PORT1 -p $PORT2 --gpus all --privileged -v $(pwd):/notebooks swift-jupyter
 fi
 
-if [ "$1" == "local" ]; then
-    export PORT1=8888:8888
-    docker run -p $PORT1 --cap-add SYS_PTRACE -v $(pwd)/..:/notebooks --name swift-jupyter swift-jupyter
+if [ "$1" == "cpu_macos" ]; then
+    docker run --name swift-jupyter -p $PORT1 -p $PORT2 --cap-add SYS_PTRACE -v $(pwd)/..:/notebooks swift-jupyter
 fi
