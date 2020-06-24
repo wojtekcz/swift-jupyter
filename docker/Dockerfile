@@ -1,7 +1,7 @@
-# cuda10.1 for fastai-1 GCP instance
+# Start from S4TF base image, but with CUDA 10.1
 FROM gcr.io/swift-tensorflow/base-deps-cuda10.1-cudnn7-ubuntu18.04 
 
-# Allows the caller to specify the toolchain to use.
+# Allow the caller to specify the toolchain to use
 ARG swift_tf_url=https://storage.googleapis.com/swift-tensorflow-artifacts/nightlies/latest/swift-tensorflow-DEVELOPMENT-cuda10.2-cudnn7-ubuntu18.04.tar.gz
 
 # Upgrade pip
@@ -33,7 +33,7 @@ RUN mkdir usr \
     && tar -xzf swift.tar.gz --directory=usr --strip-components=1 \
     && rm swift.tar.gz
 
-# Register the kernel with jupyter
+# Copy the kernel into the container
 WORKDIR /swift-jupyter
 RUN python3 register.py --user --swift-toolchain /swift-tensorflow-toolchain --swift-python-library /usr/lib/x86_64-linux-gnu/libpython3.6m.so --kernel-name "Swift"
 
@@ -44,8 +44,10 @@ RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf
 # Add Swift to the PATH
 ENV PATH="$PATH:/swift-tensorflow-toolchain/usr/bin/"
 
-# Run jupyter on startup
-EXPOSE 8888
+# Create the notebooks dir for mounting
 RUN mkdir /notebooks
 WORKDIR /notebooks
+
+# Run Jupyter on container start
+EXPOSE 8888
 CMD ["/swift-jupyter/docker/run_jupyter.sh", "--allow-root", "--no-browser", "--ip=0.0.0.0", "--port=8888", "--NotebookApp.custom_display_url=http://127.0.0.1:8888"]
