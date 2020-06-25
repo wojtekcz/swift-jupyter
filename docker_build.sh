@@ -7,7 +7,7 @@ fi
 
 if [ "$1" == "cached" ]; then
     # assuming swift toolchain tgz file is downloaded
-    # works on macOS
+    # hacky, works on macOS, requires that toolchain tgz file is placed in folder encompasing swift-jupyter.gt
     cd ..
     # https://lifehacker.com/start-a-simple-web-server-from-any-directory-on-your-ma-496425450
     python -m SimpleHTTPServer 8000 &
