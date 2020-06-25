@@ -4,3 +4,4 @@ matplotlib
 numpy
 jupyter-kernel-test
 jupyterlab
+nodejs
