@@ -17,4 +17,4 @@ if [ "$1" == "macos" ]; then
 fi
 
 cd ..
-docker run --name swift-jupyter -p $PORT1 -p $PORT2 $GPU_opts --privileged $macOS_opts -v $(pwd):/notebooks swift-jupyter
+docker run --name swift-jupyter -p $PORT1 -p $PORT2 $GPU_opts --privileged $macOS_opts -v "$(pwd)":/notebooks swift-jupyter
