@@ -9,7 +9,7 @@ GPU_opts=""
 macOS_opts=""
 
 if [ "$1" == "gpu" ]; then
-    GPU_opts=--gpus all
+    GPU_opts="--gpus all"
 fi
 
 if [ "$1" == "macos" ]; then
