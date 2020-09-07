@@ -2,7 +2,7 @@
 # build docker image with (optionally) cached swift toolchain
 
 if [ "$1" != "cached" ]; then
-    export SWIFT_TF_URL=https://storage.googleapis.com/swift-tensorflow-artifacts/releases/v0.10/rc1/swift-tensorflow-RELEASE-0.10-cuda10.1-cudnn7-ubuntu18.04.tar.gz
+    export SWIFT_TF_URL=https://storage.googleapis.com/swift-tensorflow-artifacts/releases/v0.11/rc2/swift-tensorflow-RELEASE-0.11-cuda10.1-cudnn7-ubuntu18.04.tar.gz
 fi
 
 if [ "$1" == "cached" ]; then
