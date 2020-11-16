@@ -4,27 +4,17 @@ FROM gcr.io/swift-tensorflow/base-deps-cuda10.1-cudnn7-ubuntu18.04
 # Allow the caller to specify the toolchain to use
 ARG swift_tf_url=https://storage.googleapis.com/swift-tensorflow-artifacts/nightlies/latest/swift-tensorflow-DEVELOPMENT-cuda10.2-cudnn7-ubuntu18.04.tar.gz
 
-# Upgrade pip
-RUN pip3 install --upgrade pip && \
-    pip3 install wheel
-
-# Install swift-jupyter's dependencies in python3 because we run the kernel in python3.
+# Install some python libraries that are useful to call from swift
 WORKDIR /swift-jupyter
 COPY docker/requirements*.txt ./
-RUN pip3 install -r requirements.txt
-
-# Install some python libraries that are useful to call from swift. Since
-# swift can interoperate with python3.
-RUN pip3 install -r requirements_py_graphics.txt
+RUN python3 -m pip install --upgrade pip \
+    && python3 -m pip install --no-cache-dir -r requirements.txt \
+    && python3 -m pip install --no-cache-dir -r requirements_py_graphics.txt
 
 # Install language2motion project dependencies and tools
-RUN pip3 install -r requirements_l2m.txt
+RUN python3 -m pip install -r requirements_l2m.txt
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-client tmux mc glances wget unzip
-
-# Copy the kernel into the container
-WORKDIR /swift-jupyter
-COPY . .
 
 # Download and extract S4TF
 WORKDIR /swift-tensorflow-toolchain
@@ -35,11 +25,10 @@ RUN mkdir usr \
 
 # Copy the kernel into the container
 WORKDIR /swift-jupyter
-RUN python3 register.py --user --swift-toolchain /swift-tensorflow-toolchain --swift-python-library /usr/lib/x86_64-linux-gnu/libpython3.6m.so --kernel-name "Swift"
+COPY . .
 
-# Configure cuda
-RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf.d/cuda-10.0-stubs.conf && \
-    ldconfig
+# Register the kernel with jupyter
+RUN python3 register.py --user --swift-toolchain /swift-tensorflow-toolchain
 
 # Add Swift to the PATH
 ENV PATH="$PATH:/swift-tensorflow-toolchain/usr/bin/"

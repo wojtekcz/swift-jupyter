@@ -5,3 +5,4 @@ numpy
 jupyter-kernel-test
 jupyterlab
 nodejs
+flaky
